@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="h1">
+      <h1>
+        <a href="https://oykos.me/about/"
+          ><img id="logo" src="img/horizontal-logo.png" alt="logo"
+        /></a>
+        Employee Cards <button id="add-employee-button">Add Employee</button>
+      </h1>
+    </div>
+    <div id="list">
+      <div id="list2">
+        <ul id="employee-list"></ul>
+      </div>
+    </div>
+
+    <div id="add-employee-form" style="display: none">
+      <form>
+        <button type="button" id="close-button">X</button> <br />
+
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" /><br />
+
+        <label for="last-name">Last Name:</label>
+        <input type="text" id="last-name" name="last_name" /><br />
+
+        <label for="date-of-birth">Date of Birth:</label>
+        <input type="date" id="date-of-birth" name="date_of_birth" /><br />
+        <br />
+
+        <label for="id-type">ID Type:</label>
+        <select id="id-type" name="id_type">
+          <option value="1">Frontend</option>
+          <option value="2">Backend</option>
+          <option value="3">UI/UX</option>
+          <option value="4">HR</option>
+          <option value="5">Project Manager</option>
+          <option value="6">Accountant</option></select
+        ><br />
+
+        <label for="picture-url">Picture URL:</label>
+        <input type="text" id="picture-url" name="picture_url" /><br />
+
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>
