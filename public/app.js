@@ -2,17 +2,22 @@ const employeeList = document.getElementById("employee-list");
 const addEmployeeButton = document.getElementById("add-employee-button");
 const addEmployeeForm = document.getElementById("add-employee-form");
 
-function createEmployeeCard(employee) {
+function createEmployeeCard(employee, types) {
   const card = document.createElement("div");
   card.className = "card";
   card.dataset.id = employee.id;
+
+  let idType = "";
+  if (types && types.length > 0) {
+    idType = types.find((type) => type.id === employee.id_type)?.name || "";
+  }
 
   card.innerHTML = `
     <img class="card-img-top" src="${employee.picture}" alt="${employee.name} ${employee.last_name}">
     <div class="card-body">
       <h5 class="card-title">${employee.name} ${employee.last_name}</h5>
       <p class="card-text">Date of Birth: ${employee.date_of_birth}</p>
-      <p class="card-text">Profession: ${employee.id_type.name}</p>
+      <p class="card-text">Profession: ${idType}</p>
       <p id="id-text" class="card-text">ID: ${employee.id}      <button class="remove-button" onclick="removeCard(this)">X</button>
       </p>
     </div>
@@ -43,12 +48,17 @@ function removeCard(button) {
 }
 
 function displayEmployees() {
-  fetch("http://localhost:3000/employees")
-    .then((response) => response.json())
-    .then((employees) => {
+  Promise.all([
+    fetch("http://localhost:3000/employees"),
+    fetch("http://localhost:3000/types"),
+  ])
+    .then(([employeesResponse, typesResponse]) =>
+      Promise.all([employeesResponse.json(), typesResponse.json()])
+    )
+    .then(([employees, types]) => {
       employeeList.innerHTML = "";
       employees.forEach((employee) => {
-        const card = createEmployeeCard(employee);
+        const card = createEmployeeCard(employee, types);
         employeeList.appendChild(card);
       });
     })
@@ -71,10 +81,7 @@ addEmployeeForm.addEventListener("submit", async (event) => {
   const name = event.target.name.value;
   const lastName = event.target.last_name.value;
   const dateOfBirth = event.target.date_of_birth.value;
-  const idType = {
-    id: event.target.id_type.value,
-    name: event.target.id_type.options[event.target.id_type.selectedIndex].text,
-  };
+  const idType = event.target.id_type.value;
   const picture = event.target.picture_url.value;
 
   const response = await fetch("http://localhost:3000/employees", {
@@ -86,7 +93,7 @@ addEmployeeForm.addEventListener("submit", async (event) => {
       name,
       last_name: lastName,
       date_of_birth: dateOfBirth,
-      id_type: idType,
+      id_type: parseInt(idType),
       picture,
     }),
   });
@@ -95,7 +102,6 @@ addEmployeeForm.addEventListener("submit", async (event) => {
 
   const newEmployeeCard = createEmployeeCard(newEmployee);
 
-  const employeeList = document.getElementById("employee-list");
   employeeList.appendChild(newEmployeeCard);
 
   displayEmployees();
